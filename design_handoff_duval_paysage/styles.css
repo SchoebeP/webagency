@@ -1,0 +1,175 @@
+/* ============================================================
+   Duval Paysage — design tokens & base
+   ============================================================ */
+:root {
+  /* Palette */
+  --forest:   #1F3D2B;  /* primaire */
+  --forest-d: #16301F;  /* foncé */
+  --meadow:   #4F7A4A;  /* vert prairie */
+  --meadow-d: #3E6239;
+  --earth:    #6B5844;  /* terre / taupe */
+  --sand:     #F1ECE2;  /* sable clair */
+  --offwhite: #FBF8F1;  /* blanc cassé */
+  --ink:      #232323;  /* texte anthracite */
+  --ink-soft: #4A4A45;
+  --line:     #E2DAC9;
+  --cta:      #C8772E;  /* orange chantier */
+  --cta-d:    #AC621F;
+  --star:     #E8A21C;
+
+  /* Typo */
+  --font-head: "Archivo", "Barlow Condensed", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --head-weight: 800;
+  --head-spacing: -0.01em;
+
+  /* Forme */
+  --radius: 8px;
+  --radius-sm: 6px;
+  --shadow-sm: 0 2px 4px rgba(31,61,43,.08), 0 6px 16px rgba(31,61,43,.07);
+  --shadow:    0 4px 10px rgba(31,61,43,.10), 0 16px 36px rgba(31,61,43,.12);
+  --shadow-lg: 0 10px 24px rgba(22,48,31,.16), 0 30px 60px rgba(22,48,31,.18);
+
+  /* Layout */
+  --maxw: 1200px;
+  --gutter: clamp(20px, 5vw, 56px);
+  --header-h: 72px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--offwhite);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-head);
+  font-weight: var(--head-weight);
+  letter-spacing: var(--head-spacing);
+  line-height: 1.04;
+  margin: 0;
+  color: var(--forest);
+  text-wrap: balance;
+}
+
+/* Échelle de titres */
+.h-display { font-size: clamp(2.3rem, 6.2vw, 4.4rem); line-height: 1.0; }
+.h-section { font-size: clamp(1.9rem, 4.2vw, 3rem); }
+.h-sub     { font-size: clamp(1.15rem, 2vw, 1.4rem); }
+
+.eyebrow {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: .82rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--meadow);
+  display: inline-flex;
+  align-items: center;
+  gap: .55em;
+}
+.eyebrow::before {
+  content: "";
+  width: 26px; height: 2px;
+  background: var(--meadow);
+  display: inline-block;
+}
+
+/* Layout helpers */
+.wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+.section { padding-block: clamp(56px, 8vw, 104px); }
+.section--sand { background: var(--sand); }
+.section--forest { background: var(--forest); color: var(--offwhite); }
+.section--forest h2, .section--forest h3 { color: var(--offwhite); }
+.lead { font-size: clamp(1.05rem, 1.6vw, 1.22rem); color: var(--ink-soft); max-width: 56ch; }
+
+/* ============================================================
+   Buttons — GROS, fort contraste
+   ============================================================ */
+.btn {
+  --b: var(--cta);
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: .6em;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.08rem;
+  letter-spacing: .005em;
+  padding: 18px 30px;
+  min-height: 58px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-decoration: none;
+  background: var(--b);
+  color: #fff;
+  box-shadow: 0 4px 0 var(--cta-d), var(--shadow-sm);
+  transition: transform .08s ease, box-shadow .08s ease, background .15s ease;
+  white-space: nowrap;
+}
+.btn:hover { background: var(--cta-d); }
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--cta-d), var(--shadow-sm); }
+.btn--lg { font-size: 1.2rem; padding: 22px 38px; min-height: 66px; }
+.btn--block { width: 100%; }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--forest);
+  box-shadow: inset 0 0 0 2px var(--forest);
+}
+.btn--ghost:hover { background: var(--forest); color: #fff; }
+.btn--ghost:active { transform: none; box-shadow: inset 0 0 0 2px var(--forest); }
+
+.btn--phone {
+  background: var(--forest);
+  color: #fff;
+  box-shadow: 0 4px 0 var(--forest-d), var(--shadow-sm);
+}
+.btn--phone:hover { background: var(--forest-d); }
+.btn--phone:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--forest-d), var(--shadow-sm); }
+
+.btn--onforest {
+  background: #fff; color: var(--forest);
+  box-shadow: 0 4px 0 rgba(0,0,0,.25), var(--shadow-sm);
+}
+.btn--onforest:hover { background: var(--sand); }
+
+/* Cards */
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Trust badge row */
+.stars { color: var(--star); letter-spacing: 1px; }
+
+/* Image slot defaults */
+image-slot {
+  --is-bg: var(--sand);
+  background: var(--sand);
+  border-radius: var(--radius);
+}
+
+/* Utilities */
+.center { text-align: center; }
+.mx-auto { margin-inline: auto; }
+.muted { color: var(--ink-soft); }
+
+/* Reveal on scroll */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  html { scroll-behavior: auto; }
+}
