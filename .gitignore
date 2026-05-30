@@ -35,6 +35,5 @@ next-env.d.ts
 
 # local verification artifacts (visual diff screenshots, playwright output)
 /.playwright-mcp/
-/*-desktop-*.png
-/*-mobile-*.png
-/next-demo-switcher-*.png
+/proto-*.png
+/next-*.png
