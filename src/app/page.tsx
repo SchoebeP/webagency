@@ -1,19 +1,27 @@
-import { SectionHead } from "@/components/ui/SectionHead";
-import { GradientText } from "@/components/ui/GradientText";
+import { Hero } from "@/components/sections/Hero";
+import { Services } from "@/components/sections/Services";
+import { WhyUs } from "@/components/sections/WhyUs";
+import { Works } from "@/components/sections/Works";
+import { Pricing } from "@/components/sections/Pricing";
+import { QuoteWizard } from "@/components/quote/QuoteWizard";
+import { Process } from "@/components/sections/Process";
+import { Testimonials } from "@/components/sections/Testimonials";
+import { Faq } from "@/components/sections/Faq";
+import { Contact } from "@/components/sections/Contact";
 
-// PLACEHOLDER — replaced once the section components are built (Phase 2/3).
 export default function Home() {
   return (
-    <section id="hero" className="wrap" style={{ paddingTop: 190 }}>
-      <SectionHead
-        eyebrow="Foundation"
-        title={
-          <>
-            Studio Albâtre <GradientText>en construction</GradientText>
-          </>
-        }
-        description="Design system foundation in place. Sections are being assembled."
-      />
-    </section>
+    <>
+      <Hero />
+      <Services />
+      <WhyUs />
+      <Works />
+      <Pricing />
+      <QuoteWizard />
+      <Process />
+      <Testimonials />
+      <Faq />
+      <Contact />
+    </>
   );
 }

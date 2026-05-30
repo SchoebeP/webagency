@@ -5,6 +5,7 @@ import { Aurora } from "@/components/layout/Aurora";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
 import { RevealManager } from "@/components/layout/RevealManager";
+import { DemoSwitcher } from "@/components/demo/DemoSwitcher";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { QuotePrefillProvider } from "@/components/providers/QuotePrefillContext";
 import { site } from "@/lib/site";
@@ -80,6 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
             <Footer />
             <RevealManager />
+            <DemoSwitcher />
           </QuotePrefillProvider>
         </ThemeProvider>
       </body>
