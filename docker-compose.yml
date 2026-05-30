@@ -1,0 +1,42 @@
+# Studio Albâtre — Docker Compose
+#
+#   Production (default):    docker compose up --build web
+#   Local dev (hot reload):  docker compose --profile dev up --build dev
+#
+# Both serve on http://localhost:3000 (run one at a time).
+# OrbStack also exposes each service at <service>.<project>.orb.local
+# (e.g. http://web.webagency.orb.local) automatically — no extra config.
+
+services:
+  # --- Production: small standalone image ---
+  web:
+    build:
+      context: .
+      target: runner
+    image: studio-albatre:prod
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+    restart: unless-stopped
+
+  # --- Local development: hot reload with source bind-mounted ---
+  dev:
+    profiles: ["dev"]
+    build:
+      context: .
+      target: dev
+    image: studio-albatre:dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+      # Enables webpack file-change polling in next.config (hot reload over the
+      # container bind mount, where native FS events aren't reliably delivered).
+      - DOCKER_DEV=1
+    volumes:
+      - .:/app # live source
+      - /app/node_modules # keep the image's Linux node_modules
+      - /app/.next # keep the build cache inside the container
