@@ -1,0 +1,27 @@
+{
+  "name": "les-poulettes-du-bec",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site vitrine restaurant / salon de thé — modèle réutilisable (Studio Albâtre)",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^15.5.18",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.5.18",
+    "postcss": "^8.4.49",
+    "typescript": "^5"
+  }
+}
