@@ -10,16 +10,19 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { QuotePrefillProvider } from "@/components/providers/QuotePrefillContext";
 import { site } from "@/lib/site";
 
+// Weights trimmed to those actually rendered (browser-verified): the display
+// font uses 500/600/700 (700 is the fallback for the few weight:900 elements);
+// the body font uses 400/600/700. Dropped weights saved ~39 kB of fonts.
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["500", "600", "700"],
   variable: "--font-space-grotesk",
   display: "swap",
 });
 
 const manrope = Manrope({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "600", "700"],
   variable: "--font-manrope",
   display: "swap",
 });
@@ -60,6 +63,35 @@ export const viewport: Viewport = {
 // Runs before paint to apply the saved theme and avoid a flash / hydration mismatch.
 const themeInit = `(function(){try{var t=localStorage.getItem('studio-albatre-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();`;
 
+// LocalBusiness structured data for local SEO. Fields are emitted conditionally
+// so placeholder contact details (README §11) are never published to Google.
+const hasRealPhone =
+  (site.phoneHref as string) !== "tel:+33600000000" &&
+  !(site.phoneDisplay as string).includes("X");
+const realSocials = Object.values(site.socials).filter((u) => u !== "#");
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: site.name,
+  url: site.url,
+  description:
+    "Création de sites internet et référencement SEO en Normandie : sites vitrines, e-commerce et SEO local à Rouen, Caen, Le Havre et Évreux.",
+  email: site.email,
+  address: {
+    "@type": "PostalAddress",
+    addressRegion: site.region,
+    addressCountry: "FR",
+  },
+  areaServed: site.zones
+    .filter((z) => z !== "À distance")
+    .map((z) => ({ "@type": "City", name: z })),
+  ...(hasRealPhone
+    ? { telephone: site.phoneHref.replace("tel:", "") }
+    : {}),
+  ...(realSocials.length ? { sameAs: realSocials } : {}),
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
@@ -74,6 +106,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <Aurora />
         <ThemeProvider>
           <QuotePrefillProvider>

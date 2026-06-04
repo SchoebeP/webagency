@@ -13,9 +13,8 @@ export const site = {
   url: "https://studio-albatre.fr",
 
   email: "contact@studio-albatre.fr",
-  // PLACEHOLDER — replace with the real number.
-  phoneDisplay: "06 XX XX XX XX",
-  phoneHref: "tel:+33600000000",
+  phoneDisplay: "07 78 04 82 18",
+  phoneHref: "tel:+33778048218",
 
   // PLACEHOLDER — replace href="#" with real profiles.
   socials: {

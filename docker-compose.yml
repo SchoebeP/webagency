@@ -3,7 +3,7 @@
 #   Production (default):    docker compose up --build web
 #   Local dev (hot reload):  docker compose --profile dev up --build dev
 #
-# Both serve on http://localhost:3000 (run one at a time).
+# Production serves on http://localhost:3001, dev on http://localhost:3000.
 # OrbStack also exposes each service at <service>.<project>.orb.local
 # (e.g. http://web.webagency.orb.local) automatically — no extra config.
 
@@ -15,7 +15,8 @@ services:
       target: runner
     image: studio-albatre:prod
     ports:
-      - "3000:3000"
+      # Host 3001 (3000 is taken by Grafana on the prod VPS); container stays 3000.
+      - "3001:3000"
     environment:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1

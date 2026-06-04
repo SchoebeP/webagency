@@ -65,7 +65,7 @@
   --bg-2: #e6ecff;
   --text: #0f1230;
   --text-muted: #4a5273;
-  --text-faint: #767ea0;
+  --text-faint: #5f668c;
 
   --glass-fill: rgba(255, 255, 255, 0.55);
   --glass-fill-strong: rgba(255, 255, 255, 0.72);
@@ -154,7 +154,7 @@ body {
 /* 1 · Océan — Indigo · Cyan (défaut) */
 [data-palette="ocean"] { --indigo:#6366f1; --indigo-deep:#4338ca; --blue:#3b82f6; --cyan:#22d3ee; --turquoise:#2dd4bf;
   --blob-1:rgba(99,102,241,.55); --blob-2:rgba(34,211,238,.45); --blob-3:rgba(45,212,191,.4); --blob-4:rgba(59,130,246,.5); --accent-text:#22d3ee; }
-[data-theme="light"][data-palette="ocean"] { --accent-text:#0c8aa6; }
+[data-theme="light"][data-palette="ocean"] { --accent-text:#08758a; }
 
 /* 2 · Aurore — Violet · Magenta */
 [data-palette="aurore"] { --indigo:#8b5cf6; --indigo-deep:#6d28d9; --blue:#a855f7; --cyan:#d946ef; --turquoise:#ec4899;
@@ -174,7 +174,7 @@ body {
 /* 5 · Nuit dorée — Bleu nuit · Or */
 [data-palette="nuit"] { --indigo:#4263eb; --indigo-deep:#3b5bdb; --blue:#4c6ef5; --cyan:#fcc419; --turquoise:#f59f00;
   --blob-1:rgba(66,99,235,.5); --blob-2:rgba(76,110,245,.4); --blob-3:rgba(252,196,25,.35); --blob-4:rgba(59,91,219,.5); --accent-text:#fcc419; }
-[data-theme="light"][data-palette="nuit"] { --accent-text:#a16207; }
+[data-theme="light"][data-palette="nuit"] { --accent-text:#8a5406; }
 
 /* 6 · Ardoise — Bleu sobre */
 [data-palette="ardoise"] { --indigo:#64748b; --indigo-deep:#475569; --blue:#3b82f6; --cyan:#38bdf8; --turquoise:#60a5fa;
@@ -198,7 +198,7 @@ body {
 /* ============================================================
    LAYOUT
    ============================================================ */
-.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+.wrap { max-width: var(--maxw); margin: 0 auto; padding-left: 24px; padding-right: 24px; }
 
 section { position: relative; padding: 110px 0; }
 
@@ -333,7 +333,7 @@ h2.title { font-size: clamp(2rem, 4vw, 3.1rem); margin-bottom: 18px; text-wrap: 
 .hero-card + .hero-card { margin-top: 18px; }
 .browser-bar { display: flex; align-items: center; gap: 7px; margin-bottom: 18px; }
 .browser-bar i { width: 11px; height: 11px; border-radius: 50%; background: var(--glass-border-strong); display: block; }
-.browser-bar .url { margin-left: 8px; font-size: 0.72rem; color: var(--text-faint); background: var(--glass-fill); padding: 4px 12px; border-radius: 999px; flex: 1; }
+.browser-bar .url { margin-left: 8px; font-size: 0.72rem; color: var(--text-muted); background: var(--glass-fill); padding: 4px 12px; border-radius: 999px; flex: 1; }
 .mini-chart { display: flex; align-items: flex-end; gap: 8px; height: 90px; margin-top: 6px; }
 .mini-chart i { flex: 1; border-radius: 6px 6px 0 0; background: linear-gradient(to top, var(--indigo), var(--cyan)); opacity: 0.85; display: block; animation: grow 1.2s var(--ease) backwards; }
 @keyframes grow { from { transform: scaleY(0); transform-origin: bottom; } }
@@ -477,6 +477,7 @@ h2.title { font-size: clamp(2rem, 4vw, 3.1rem); margin-bottom: 18px; text-wrap: 
 .info-card .ico svg { width: 22px; height: 22px; }
 .info-card h3 { font-size: 1rem; margin-bottom: 4px; }
 .info-card p, .info-card a { color: var(--text-muted); font-size: 0.92rem; margin: 0; text-decoration: none; }
+.info-card a { display: inline-block; padding: 3px 0; }
 .info-card a:hover { color: var(--accent-text); }
 .zone-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .zone-tags span { font-size: 0.78rem; font-weight: 600; padding: 5px 12px; border-radius: 999px; background: var(--glass-fill); border: 1px solid var(--glass-border); color: var(--text-muted); }
@@ -495,7 +496,7 @@ footer { padding: 70px 0 40px; position: relative; }
 .footer-col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.92rem; padding: 6px 0; transition: color 0.25s; }
 .footer-col a:hover { color: var(--accent-text); }
 .footer-bottom { padding-top: 28px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--text-faint); }
-.footer-bottom a { color: var(--text-faint); text-decoration: none; }
+.footer-bottom a { color: var(--text-faint); text-decoration: none; display: inline-block; padding: 5px 2px; border-radius: 6px; }
 .footer-bottom a:hover { color: var(--accent-text); }
 
 /* ============================================================
