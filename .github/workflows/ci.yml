@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        site: [duval-paysage, poulettes-du-bec]
+        site: [duval-paysage, poulettes-du-bec, rouvier-automobiles]
     defaults:
       run:
         working-directory: sites/${{ matrix.site }}
