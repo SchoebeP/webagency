@@ -35,8 +35,11 @@ export function Contact() {
   const [honeypot, setHoneypot] = useState(""); // anti-spam; humans never fill this
   const [errors, setErrors] = useState<Errors>(NO_ERRORS);
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
 
   const nameRef = useRef<HTMLInputElement>(null);
+  const successRef = useRef<HTMLHeadingElement>(null);
 
   // Quote wizard handed us a prefill: fill the form, scroll here, focus name.
   useEffect(() => {
@@ -44,15 +47,22 @@ export function Contact() {
     setProject(prefill.projectValue);
     setMessage(prefill.message);
     setSubmitted(false);
+    setErrors(NO_ERRORS); // the prefill satisfies project/message; drop stale flags
+    setSendError(null);
     const contact = document.getElementById("contact");
     if (contact) window.scrollTo({ top: contact.offsetTop - 70, behavior: "smooth" });
     const t = window.setTimeout(() => nameRef.current?.focus({ preventScroll: true }), 600);
     return () => window.clearTimeout(t);
   }, [prefill]);
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  // Announce the confirmation and give keyboard users a sane focus position.
+  useEffect(() => {
+    if (submitted) successRef.current?.focus();
+  }, [submitted]);
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (honeypot.trim() !== "") return; // bot: silently drop
+    if (honeypot.trim() !== "" || sending) return; // bot or double-click: silently drop
 
     const next: Errors = {
       name: !(name.trim().length > 1),
@@ -61,10 +71,31 @@ export function Contact() {
       message: !(message.trim().length > 4),
     };
     setErrors(next);
-    if (next.name || next.email || next.project || next.message) return;
+    if (next.name || next.email || next.project || next.message) {
+      // Move focus (and the screen-reader cursor) to the first invalid field.
+      const first = (["name", "email", "project", "message"] as const).find((f) => next[f]);
+      if (first) document.getElementById(first)?.focus();
+      return;
+    }
 
-    // TODO: wire to Resend / Formspree / an API route. Stubbed: show success.
-    setSubmitted(true);
+    setSending(true);
+    setSendError(null);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone, project, message, company: honeypot }),
+      });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(data?.error || "L'envoi a échoué. Réessayez dans un instant.");
+      }
+      setSubmitted(true);
+    } catch (err) {
+      setSendError(err instanceof Error ? err.message : "L'envoi a échoué. Réessayez dans un instant.");
+    } finally {
+      setSending(false);
+    }
   }
 
   const clearError = (field: keyof Errors) => setErrors((prev) => ({ ...prev, [field]: false }));
@@ -96,12 +127,14 @@ export function Contact() {
                     required
                     ref={nameRef}
                     value={name}
+                    aria-invalid={errors.name || undefined}
+                    aria-describedby={errors.name ? "name-error" : undefined}
                     onChange={(e) => {
                       setName(e.target.value);
                       clearError("name");
                     }}
                   />
-                  <span className="err-msg">Merci d&apos;indiquer votre nom.</span>
+                  <span className="err-msg" id="name-error">Merci d&apos;indiquer votre nom.</span>
                 </div>
                 <div className={cn("field", errors.email && "error")}>
                   <label htmlFor="email">Email</label>
@@ -112,12 +145,14 @@ export function Contact() {
                     placeholder="jean@entreprise.fr"
                     required
                     value={email}
+                    aria-invalid={errors.email || undefined}
+                    aria-describedby={errors.email ? "email-error" : undefined}
                     onChange={(e) => {
                       setEmail(e.target.value);
                       clearError("email");
                     }}
                   />
-                  <span className="err-msg">Email invalide.</span>
+                  <span className="err-msg" id="email-error">Email invalide.</span>
                 </div>
               </div>
 
@@ -141,6 +176,8 @@ export function Contact() {
                     name="project"
                     required
                     value={project}
+                    aria-invalid={errors.project || undefined}
+                    aria-describedby={errors.project ? "project-error" : undefined}
                     onChange={(e) => {
                       setProject(e.target.value);
                       clearError("project");
@@ -153,7 +190,7 @@ export function Contact() {
                       </option>
                     ))}
                   </select>
-                  <span className="err-msg">Merci de choisir un type de projet.</span>
+                  <span className="err-msg" id="project-error">Merci de choisir un type de projet.</span>
                 </div>
               </div>
 
@@ -165,12 +202,14 @@ export function Contact() {
                   placeholder="Parlez-moi de votre activité, vos objectifs, vos délais…"
                   required
                   value={message}
+                  aria-invalid={errors.message || undefined}
+                  aria-describedby={errors.message ? "message-error" : undefined}
                   onChange={(e) => {
                     setMessage(e.target.value);
                     clearError("message");
                   }}
                 />
-                <span className="err-msg">Merci de décrire votre projet.</span>
+                <span className="err-msg" id="message-error">Merci de décrire votre projet.</span>
               </div>
 
               {/* Honeypot — visually hidden, off the tab order, ignored by humans. */}
@@ -187,17 +226,26 @@ export function Contact() {
                 />
               </div>
 
-              <Button type="submit" variant="primary" style={{ width: "100%" }}>
+              {sendError && (
+                <p role="alert" className="send-error">
+                  {sendError} <a href={`mailto:${site.email}`}>{site.email}</a>
+                </p>
+              )}
+              {/* aria-busy instead of disabled: keeps focus on the button during the
+                  send (handleSubmit already guards re-entry) and the label legible. */}
+              <Button type="submit" variant="primary" aria-busy={sending} style={{ width: "100%" }}>
                 <Icon name="send" strokeWidth={2.2} />
-                Envoyer ma demande
+                {sending ? "Envoi en cours…" : "Envoyer ma demande"}
               </Button>
             </form>
           ) : (
-            <div className="form-success show">
+            <div className="form-success show" role="status">
               <div className="ok-ico">
                 <Icon name="check" strokeWidth={2.6} />
               </div>
-              <h3 style={{ fontSize: "1.4rem", marginBottom: 10 }}>Merci, votre demande est envoyée !</h3>
+              <h3 ref={successRef} tabIndex={-1} style={{ fontSize: "1.4rem", marginBottom: 10, outline: "none" }}>
+                Merci, votre demande est envoyée !
+              </h3>
               <p style={{ color: "var(--text-muted)", margin: 0 }}>
                 Je vous recontacte sous 24h avec un premier conseil et votre devis gratuit.
               </p>

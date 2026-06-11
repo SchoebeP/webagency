@@ -25,11 +25,12 @@ export const site = {
 
   zones: ["Rouen", "Caen", "Le Havre", "Évreux", "À distance"],
 
+  // "/#section" (not "#section") so anchors also work from subpages (legal pages).
   navLinks: [
-    { href: "#services", label: "Services" },
-    { href: "#realisations", label: "Réalisations" },
-    { href: "#tarifs", label: "Tarifs" },
-    { href: "#apropos", label: "À propos" },
-    { href: "#contact", label: "Contact" },
+    { href: "/#services", label: "Services" },
+    { href: "/#realisations", label: "Réalisations" },
+    { href: "/#tarifs", label: "Tarifs" },
+    { href: "/#apropos", label: "À propos" },
+    { href: "/#contact", label: "Contact" },
   ],
 } as const;

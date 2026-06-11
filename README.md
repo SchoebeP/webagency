@@ -1,70 +1,66 @@
-# Getting Started with Create React App
+# Studio Albâtre — webagency
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Monorepo de **Studio Albâtre** (création de sites & SEO, Normandie) :
 
-## Available Scripts
+| Dossier | Contenu |
+|---|---|
+| `/` (racine, `src/`) | Le site vitrine one-page de l'agence — Next.js 15 App Router + TypeScript + Tailwind v3 |
+| `sites/duval-paysage/` | Modèle client forkable : paysagiste (export statique, autonome) |
+| `sites/poulettes-du-bec/` | Modèle client forkable : vente d'œufs fermiers (export statique, autonome) |
+| `docs/design-archive/` | Maquettes hi-fi d'origine (handoffs design → code) |
 
-In the project directory, you can run:
+Chaque dossier `sites/*` est **auto-suffisant** (son propre `package.json`, README et instructions de fork) — il ne partage rien avec la racine.
 
-### `npm start`
+## Démarrage rapide (site racine)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+npm install
+npm run dev          # http://localhost:3000
+npm run build        # build de production
+npm run lint
+npx tsc --noEmit     # typecheck
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+> ⚠️ En local, le port 3000 héberge souvent un build de prod (`npm start`) qui ne recharge pas les modifications — pour développer, lancer `npx next dev -p 3005`.
 
-### `npm test`
+Docker (prod + dev hot-reload) : voir [DOCKER.md](DOCKER.md).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Sélecteur de démo client
 
-### `npm run build`
+Le site embarque un sélecteur caché de palettes/thèmes pour les démos clients :
+ouvrir avec **`?demo=1`** dans l'URL ou **Ctrl+Shift+D** (`src/components/demo/DemoSwitcher.tsx`).
+Défaut de production figé : palette *ocean* + thème sombre.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Formulaire de contact (Resend)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+`src/app/api/contact/route.ts` relaie les demandes par email via [Resend](https://resend.com).
+Variables d'environnement (voir `.env.example`) :
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- `RESEND_API_KEY` — **requis en production**, sinon le formulaire répond 503 ;
+- `CONTACT_TO_EMAIL` — destinataire des leads (défaut : `contact@studio-albatre.fr`) ;
+- `CONTACT_FROM_EMAIL` — expéditeur (défaut : `onboarding@resend.dev`, utilisable avant la vérification du domaine dans Resend).
 
-### `npm run eject`
+En production, ces variables se règlent dans l'environnement de la stack Portainer.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Déploiement
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Poussez sur `main` → une stack git Portainer (`studio-albatre`) sur le VPS poll la branche
+toutes les ~5 min et reconstruit l'image (`docker-compose.yml`, service `web`, port hôte 3001).
+La CI GitHub (`.github/workflows/ci.yml`) vérifie lint + types + build avant que ça parte en prod —
+**ne pas merger sur `main` si la CI est rouge.**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Dernier kilomètre manuel : vhost nginx + DNS `studio-albatre.fr` → VPS.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Avant le lancement (checklist)
 
-## Learn More
+- [ ] Pages légales : renseignées (PB Innovative Solutions / Hetzner). Reste le **médiateur de la consommation** dans `/cgv` (`[À COMPLÉTER]`) — adhérer à un service de médiation (CNPM, Medicys…) puis indiquer ses coordonnées.
+- [ ] Renseigner `RESEND_API_KEY` dans l'environnement de prod et tester le formulaire.
+- [ ] Remplacer les réseaux sociaux placeholder (`src/lib/site.ts` — les icônes restent masquées tant que l'URL vaut `#`).
+- [ ] Remplacer le portfolio et les témoignages fictifs (`src/lib/data.ts`).
+- [ ] Vérifier le domaine dans Resend puis passer `CONTACT_FROM_EMAIL` sur `contact@studio-albatre.fr`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Tests
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+npm test             # vitest — logique de pricing du devis (src/lib/quote-steps)
+```

@@ -1,13 +1,13 @@
 # Docker
 
-Two setups, both serving on **http://localhost:3000** (run one at a time).
+Two setups: production serves on **http://localhost:3001**, dev on **http://localhost:3000**.
 
 ## Production (verified)
 
 Small, self-contained image built from Next.js `standalone` output, run as a non-root user.
 
 ```bash
-docker compose up --build web        # http://localhost:3000
+docker compose up --build web        # http://localhost:3001
 docker compose down                  # stop
 ```
 
@@ -47,5 +47,5 @@ The `-v` matters: a plain `down`/`restart` reattaches the old anonymous `.next` 
 
 ## Notes
 
-- `.dockerignore` keeps the build context lean (excludes `node_modules`, `.next`, `docs/`, `design_handoff_site_vitrine/`, screenshots, etc.).
-- Both services bind port 3000; the `dev` service is gated behind the `dev` Compose profile so a bare `docker compose up` only starts production `web`.
+- `.dockerignore` keeps the build context lean (excludes `node_modules`, `.next`, `docs/` — including the archived design handoffs — `sites/`, screenshots, etc.).
+- `web` maps host 3001 → container 3000 (3000 is taken by Grafana on the prod VPS); `dev` binds host 3000 and is gated behind the `dev` Compose profile, so a bare `docker compose up` only starts production `web`.

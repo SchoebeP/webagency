@@ -20,6 +20,11 @@ services:
     environment:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
+      # Contact form (src/app/api/contact/route.ts). Set RESEND_API_KEY in the
+      # Portainer stack env (or a local .env) — without it the form returns 503.
+      - RESEND_API_KEY=${RESEND_API_KEY:-}
+      - CONTACT_TO_EMAIL=${CONTACT_TO_EMAIL:-}
+      - CONTACT_FROM_EMAIL=${CONTACT_FROM_EMAIL:-}
     restart: unless-stopped
 
   # --- Local development: hot reload with source bind-mounted ---
@@ -37,6 +42,9 @@ services:
       # Enables webpack file-change polling in next.config (hot reload over the
       # container bind mount, where native FS events aren't reliably delivered).
       - DOCKER_DEV=1
+      - RESEND_API_KEY=${RESEND_API_KEY:-}
+      - CONTACT_TO_EMAIL=${CONTACT_TO_EMAIL:-}
+      - CONTACT_FROM_EMAIL=${CONTACT_FROM_EMAIL:-}
     volumes:
       - .:/app # live source
       - /app/node_modules # keep the image's Linux node_modules

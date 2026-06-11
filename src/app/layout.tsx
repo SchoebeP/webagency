@@ -51,6 +51,9 @@ export const metadata: Metadata = {
       "Sites web modernes, rapides et optimisés SEO pour transformer vos visiteurs en clients — Rouen, Caen, Le Havre et partout en France.",
   },
   robots: { index: true, follow: true },
+  // Card type for X/Twitter & co; title, description and the generated
+  // opengraph-image are inherited from the fields above.
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = {
@@ -74,15 +77,22 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   name: site.name,
+  legalName: "PB INNOVATIVE SOLUTIONS",
+  vatID: "FR29944239748",
   url: site.url,
   description:
     "Création de sites internet et référencement SEO en Normandie : sites vitrines, e-commerce et SEO local à Rouen, Caen, Le Havre et Évreux.",
   email: site.email,
+  priceRange: "890€-2990€+",
   address: {
     "@type": "PostalAddress",
+    streetAddress: "19 Route de la Barre en Ouche",
+    addressLocality: "Mesnil-en-Ouche",
+    postalCode: "27410",
     addressRegion: site.region,
     addressCountry: "FR",
   },
+  geo: { "@type": "GeoCoordinates", latitude: 49.00713, longitude: 0.70342 },
   areaServed: site.zones
     .filter((z) => z !== "À distance")
     .map((z) => ({ "@type": "City", name: z })),
@@ -108,7 +118,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
         />
         <Aurora />
         <ThemeProvider>

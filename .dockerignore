@@ -11,9 +11,11 @@ build
 .vscode
 .DS_Store
 
-# project docs & the design-handoff reference (not needed in the image)
+# project docs, archived design handoffs & the standalone client templates
+# (none of it is needed in the image)
 docs
-design_handoff_site_vitrine
+sites
+.github
 README.md
 
 # local verification artifacts
@@ -25,8 +27,11 @@ Dockerfile
 docker-compose.yml
 .dockerignore
 
-# logs & local env
+# logs & local env — .env holds real secrets and must NEVER enter the build
+# context (the builder stage does `COPY . .`); runtime env comes from compose.
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.env*.local
+.env
+.env.*
+!.env.example

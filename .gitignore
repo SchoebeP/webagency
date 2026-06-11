@@ -39,3 +39,6 @@ next-env.d.ts
 /.playwright-mcp/
 /proto-*.png
 /next-*.png
+
+# JetBrains
+.idea/

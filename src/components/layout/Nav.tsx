@@ -45,7 +45,7 @@ export function Nav() {
               <Icon name="moon" strokeWidth={2} className="moon" />
               <Icon name="sun" strokeWidth={2} className="sun" />
             </button>
-            <Button href="#estimation" small>
+            <Button href="/#estimation" small>
               Devis gratuit
             </Button>
             <button className="burger" aria-label="Menu" aria-expanded={menuOpen} onClick={() => setMenuOpen((o) => !o)}>
@@ -62,7 +62,7 @@ export function Nav() {
               {l.label}
             </a>
           ))}
-          <Button href="#estimation" onClick={() => setMenuOpen(false)}>
+          <Button href="/#estimation" onClick={() => setMenuOpen(false)}>
             Demander un devis gratuit
           </Button>
         </div>

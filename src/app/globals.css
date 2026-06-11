@@ -56,6 +56,7 @@
   --blob-4: rgba(59, 130, 246, 0.5);
 
   --accent-text: var(--cyan);
+  --error-text: #f87171;
 }
 
 /* ---------- LIGHT ---------- */
@@ -79,6 +80,7 @@
   --blob-4: rgba(59, 130, 246, 0.45);
 
   --accent-text: #0c8aa6;
+  --error-text: #dc2626;
   --shadow-glass: 0 18px 50px -16px rgba(60, 70, 160, 0.28);
   --shadow-soft: 0 10px 30px -14px rgba(60, 70, 160, 0.22);
 }
@@ -463,8 +465,8 @@ h2.title { font-size: clamp(2rem, 4vw, 3.1rem); margin-bottom: 18px; text-wrap: 
 .field textarea { resize: vertical; min-height: 120px; }
 .field input::placeholder, .field textarea::placeholder { color: var(--text-faint); }
 .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(34,211,238,0.18); }
-.field.error input, .field.error select, .field.error textarea { border-color: #f87171; box-shadow: 0 0 0 3px rgba(248,113,113,0.18); }
-.field .err-msg { font-size: 0.78rem; color: #f87171; margin-top: 6px; display: none; }
+.field.error input, .field.error select, .field.error textarea { border-color: var(--error-text); box-shadow: 0 0 0 3px rgba(248,113,113,0.18); }
+.field .err-msg { font-size: 0.78rem; color: var(--error-text); margin-top: 6px; display: none; }
 .field.error .err-msg { display: block; }
 .form-success { display: none; text-align: center; padding: 40px 20px; }
 .form-success.show { display: block; }
@@ -619,5 +621,24 @@ footer { padding: 70px 0 40px; position: relative; }
   .footer-bottom { flex-direction: column; align-items: flex-start; }
   .hero-trust { gap: 18px; }
 }
+
+/* ============ Legal pages (mentions légales / confidentialité / CGV) ============ */
+.legal { padding-top: 140px; padding-bottom: 60px; }
+.legal-panel { max-width: 820px; margin: 0 auto; padding: 48px clamp(24px, 5vw, 56px); border-radius: var(--radius-lg); }
+.legal-back { display: inline-block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 28px; }
+.legal-back:hover { color: var(--accent-text); }
+.legal-panel h1 { font-size: clamp(1.7rem, 3.5vw, 2.3rem); margin-bottom: 8px; }
+.legal-updated { font-size: 0.85rem; color: var(--text-faint); margin-bottom: 34px; }
+.legal-panel h2 { font-size: 1.2rem; margin: 34px 0 12px; }
+.legal-panel p, .legal-panel li { color: var(--text-muted); line-height: 1.7; font-size: 0.97rem; }
+.legal-panel p { margin: 0 0 14px; }
+.legal-panel ul { margin: 0 0 14px; padding-left: 22px; list-style: disc; }
+.legal-panel a { color: var(--accent-text); text-decoration: underline; text-underline-offset: 3px; }
+.legal-todo { background: rgba(248, 113, 113, 0.12); border: 1px dashed var(--error-text); border-radius: 6px; padding: 1px 7px; font-size: 0.9em; color: var(--text); overflow-wrap: anywhere; }
+
+/* Contact form async states (Contact.tsx) */
+.send-error { color: var(--error-text); margin: 0 0 14px; font-size: 0.92rem; }
+.send-error a { color: inherit; text-decoration: underline; }
+.btn[aria-busy="true"] { opacity: 0.7; cursor: progress; }
 
 @tailwind utilities;
