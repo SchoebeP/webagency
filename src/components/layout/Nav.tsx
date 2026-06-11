@@ -28,6 +28,15 @@ export function Nav() {
     };
   }, [menuOpen]);
 
+  // Menu links: unlock body scroll SYNCHRONOUSLY before the anchor's default
+  // navigation runs — the effect above only unlocks after React re-renders,
+  // by which time the browser has already swallowed the scroll-to-section
+  // (URL hash changed but the page stayed put; reproduced on mobile Chrome).
+  function closeMenu() {
+    document.body.style.overflow = "";
+    setMenuOpen(false);
+  }
+
   return (
     <>
       <nav className={cn("nav", scrolled && "scrolled")} id="nav">
@@ -58,11 +67,11 @@ export function Nav() {
       <div className={cn("mobile-menu", menuOpen && "open")} id="mobileMenu">
         <div className="mm-inner glass">
           {site.navLinks.map((l) => (
-            <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)}>
+            <a key={l.href} href={l.href} onClick={closeMenu}>
               {l.label}
             </a>
           ))}
-          <Button href="/#estimation" onClick={() => setMenuOpen(false)}>
+          <Button href="/#estimation" onClick={closeMenu}>
             Demander un devis gratuit
           </Button>
         </div>

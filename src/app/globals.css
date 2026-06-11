@@ -610,6 +610,9 @@ footer { padding: 70px 0 40px; position: relative; }
   section { padding: 80px 0; }
   .hero { padding-top: 150px; }
   .nav-links { display: none; }
+  /* .nav-links (and its margin-left:auto) is gone here, so spread the
+     remaining logo + actions to the edges instead of clustering left. */
+  .nav-inner { justify-content: space-between; }
   .nav-actions .btn { display: none; }
   .burger { display: grid; }
   .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
