@@ -6,5 +6,9 @@ import { clearSessionCookie } from "@/lib/auth";
 
 export async function POST(request: Request) {
   await clearSessionCookie();
-  return NextResponse.redirect(new URL("/admin/login", request.url), 303);
+  // new URL("/admin/login", ...) repartirait de la racine du domaine et
+  // perdrait le basePath éventuel : on le re-préfixe explicitement
+  // (BASE_PATH est aussi lu au runtime par le serveur standalone).
+  const basePath = process.env.BASE_PATH ?? "";
+  return NextResponse.redirect(new URL(`${basePath}/admin/login`, request.url), 303);
 }

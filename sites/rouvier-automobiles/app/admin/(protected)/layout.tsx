@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
+import { withBase } from "@/lib/base-path";
 import { Icon } from "@/components/ui";
 import { AdminNav } from "@/components/admin/admin-nav";
 
@@ -31,7 +32,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <Icon name="arrowRight" size={16} />
             Voir le site
           </Link>
-          <form action="/api/admin/logout" method="post">
+          {/* action= est une URL brute (pas un <Link>) : préfixe basePath requis. */}
+          <form action={withBase("/api/admin/logout")} method="post">
             <button type="submit" className="admin-nav-link admin-logout">
               <Icon name="arrowLeft" size={16} />
               Se déconnecter

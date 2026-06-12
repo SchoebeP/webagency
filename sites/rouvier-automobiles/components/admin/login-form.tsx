@@ -4,6 +4,7 @@
 // vers /admin (le cookie de session est posé par la route).
 
 import { useState, type FormEvent } from "react";
+import { withBase } from "@/lib/base-path";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
@@ -16,13 +17,13 @@ export function LoginForm() {
     setPending(true);
     setError(null);
     try {
-      const res = await fetch("/api/admin/login", {
+      const res = await fetch(withBase("/api/admin/login"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
       if (res.ok) {
-        window.location.assign("/admin");
+        window.location.assign(withBase("/admin"));
         return;
       }
       const data = (await res.json().catch(() => null)) as { error?: string } | null;

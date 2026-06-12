@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import type { Vehicle } from "@/lib/types";
+import { withBase } from "@/lib/base-path";
 
 // Liste des badges du README (§ Components / Badge).
 const BADGE_OPTIONS = [
@@ -130,7 +131,7 @@ export function VehicleForm({ vehicle }: { vehicle?: Vehicle }) {
       const fd = new FormData();
       fd.append("file", file);
       if (vehicle) fd.append("vehicleId", vehicle.id);
-      const res = await fetch("/api/admin/photos", { method: "POST", body: fd });
+      const res = await fetch(withBase("/api/admin/photos"), { method: "POST", body: fd });
       const data = (await res.json().catch(() => null)) as
         | { filename?: string; error?: string }
         | null;
@@ -160,7 +161,7 @@ export function VehicleForm({ vehicle }: { vehicle?: Vehicle }) {
     // véhicule enregistré) : on le supprime immédiatement du disque.
     if (!initialPhotos.current.includes(filename)) {
       try {
-        await fetch("/api/admin/photos", {
+        await fetch(withBase("/api/admin/photos"), {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ filename }),
@@ -209,7 +210,9 @@ export function VehicleForm({ vehicle }: { vehicle?: Vehicle }) {
     };
     try {
       const res = await fetch(
-        vehicle ? `/api/admin/vehicles/${encodeURIComponent(vehicle.id)}` : "/api/admin/vehicles",
+        withBase(
+          vehicle ? `/api/admin/vehicles/${encodeURIComponent(vehicle.id)}` : "/api/admin/vehicles"
+        ),
         {
           method: vehicle ? "PUT" : "POST",
           headers: { "Content-Type": "application/json" },
@@ -348,7 +351,7 @@ export function VehicleForm({ vehicle }: { vehicle?: Vehicle }) {
           {form.photos.map((filename) => (
             <div key={filename} className="photo-slot">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`/api/photos/${encodeURIComponent(filename)}`} alt="Photo du véhicule" />
+              <img src={withBase(`/api/photos/${encodeURIComponent(filename)}`)} alt="Photo du véhicule" />
               <button
                 type="button"
                 className="photo-del"

@@ -5,6 +5,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { RequestStatus } from "@/lib/types";
+import { withBase } from "@/lib/base-path";
 
 export function RequestStatusToggle({ id, status }: { id: string; status: RequestStatus }) {
   const router = useRouter();
@@ -15,7 +16,7 @@ export function RequestStatusToggle({ id, status }: { id: string; status: Reques
     setPending(true);
     setError(false);
     try {
-      const res = await fetch(`/api/admin/requests/${encodeURIComponent(id)}`, {
+      const res = await fetch(withBase(`/api/admin/requests/${encodeURIComponent(id)}`), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: status === "new" ? "handled" : "new" }),

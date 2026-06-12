@@ -15,6 +15,10 @@ const nextConfig = {
   // Les photos passent par /api/photos/[filename] avec des <img> simples ;
   // on n'utilise pas l'optimiseur next/image.
   images: { unoptimized: true },
+  // Préfixe optionnel de déploiement (ex. BASE_PATH=/rouvier pour servir le
+  // site sous https://studio-albatre.fr/rouvier). Vide par défaut → racine.
+  // Env de build — à fournir avec NEXT_PUBLIC_BASE_PATH (voir lib/base-path.ts).
+  basePath: process.env.BASE_PATH || "",
 };
 
 export default nextConfig;

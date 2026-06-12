@@ -4,6 +4,7 @@
 // exige 10 caractères minimum et une double saisie identique.
 
 import { useState, type FormEvent } from "react";
+import { withBase } from "@/lib/base-path";
 
 const MIN_LENGTH = 10;
 
@@ -29,7 +30,7 @@ export function PasswordForm() {
     setError(null);
     setPending(true);
     try {
-      const res = await fetch("/api/admin/password", {
+      const res = await fetch(withBase("/api/admin/password"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ current, next }),

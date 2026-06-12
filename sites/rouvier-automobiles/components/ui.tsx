@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, type MouseEvent } from "react";
 import type { Vehicle } from "@/lib/types";
 import { formatKm, formatMonthly, formatPrice } from "@/lib/format";
+import { withBase } from "@/lib/base-path";
 
 /* ===== Icônes (SVG inline 24×24, stroke 1.8, round) ===== */
 
@@ -297,7 +298,7 @@ export function CarPhoto({
     <div className={"car-photo" + (className ? " " + className : "")}>
       {filename ? (
         <img
-          src={`/api/photos/${encodeURIComponent(filename)}`}
+          src={withBase(`/api/photos/${encodeURIComponent(filename)}`)}
           alt={label}
           loading={priority ? "eager" : "lazy"}
           fetchPriority={priority ? "high" : undefined}

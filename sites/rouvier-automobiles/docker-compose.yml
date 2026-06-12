@@ -1,0 +1,30 @@
+# Rouvier Automobiles — déploiement démo sous https://studio-albatre.fr/rouvier
+#
+#   docker compose -p rouvier up -d --build
+#
+# Pas de port hôte publié : seul le reverse proxy nginx (connecté au réseau
+# rouvier_default) atteint le conteneur. Les données (db.json + photos +
+# .admin-credentials) vivent dans le volume nommé — elles survivent aux
+# rebuilds. ⚠️ Un seul conteneur par volume (voir README).
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        BASE_PATH: /rouvier
+        NEXT_PUBLIC_BASE_PATH: /rouvier
+    image: rouvier-automobiles:demo
+    container_name: rouvier-web
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+      - DATA_DIR=/data
+      - BASE_PATH=/rouvier
+      - SITE_URL=https://studio-albatre.fr/rouvier
+    volumes:
+      - rouvier_data:/data
+    restart: unless-stopped
+
+volumes:
+  rouvier_data:

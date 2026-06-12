@@ -6,6 +6,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { withBase } from "@/lib/base-path";
 
 export function VehicleRowActions({
   id,
@@ -24,7 +25,7 @@ export function VehicleRowActions({
     setPending(true);
     setError(false);
     try {
-      const res = await fetch(`/api/admin/vehicles/${encodeURIComponent(id)}`, {
+      const res = await fetch(withBase(`/api/admin/vehicles/${encodeURIComponent(id)}`), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sold: !sold }),
@@ -44,7 +45,7 @@ export function VehicleRowActions({
     setPending(true);
     setError(false);
     try {
-      const res = await fetch(`/api/admin/vehicles/${encodeURIComponent(id)}`, {
+      const res = await fetch(withBase(`/api/admin/vehicles/${encodeURIComponent(id)}`), {
         method: "DELETE",
       });
       if (!res.ok) setError(true);

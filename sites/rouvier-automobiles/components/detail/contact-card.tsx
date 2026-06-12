@@ -8,6 +8,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { Vehicle } from "@/lib/types";
 import { Icon } from "@/components/ui";
+import { withBase } from "@/lib/base-path";
 
 type Status = "idle" | "sending" | "sent";
 
@@ -38,7 +39,7 @@ export function ContactCard({ vehicle }: { vehicle: Vehicle }) {
     setStatus("sending");
     setError(null);
     try {
-      const res = await fetch("/api/test-drive", {
+      const res = await fetch(withBase("/api/test-drive"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
