@@ -1,9 +1,10 @@
 "use client";
 
-// Galerie de la fiche véhicule — photo principale (430px) + 3 vignettes (110px).
+// Galerie de la fiche véhicule — photo principale (430px) + vignettes (110px).
 // Cliquer une vignette l'échange avec la photo principale (permutation des
-// index : aucune photo dupliquée). Les emplacements suivent le proto :
-// 0 = principale, 1 = intérieur, 2 = 3/4 arrière, 3 = détail.
+// index : aucune photo dupliquée). Le nombre de vignettes suit le nombre réel
+// de photos du véhicule (jusqu'à 3) ; aucun emplacement « Photo à venir » n'est
+// affiché dès qu'au moins une vraie photo existe. Zéro photo → placeholder seul.
 
 import { useState } from "react";
 import type { Vehicle } from "@/lib/types";
@@ -21,17 +22,16 @@ const thumbReset: React.CSSProperties = {
   borderRadius: "var(--radius-sm)",
 };
 
-// Vignette « Photo à venir » : même emprise, mais inerte (pas de permutation).
-const thumbPlaceholder: React.CSSProperties = {
-  display: "block",
-  width: "100%",
-  borderRadius: "var(--radius-sm)",
-};
-
 export function Gallery({ vehicle }: { vehicle: Vehicle }) {
-  // order[0] = index affiché en grand ; order[1..3] = vignettes.
-  const [order, setOrder] = useState<number[]>([0, 1, 2, 3]);
+  // order = indices des photos réelles ; order[0] = affichée en grand,
+  // order[1..] = vignettes. Au plus 4 vues (1 principale + 3 vignettes).
+  const count = Math.min(vehicle.photos.length, 4);
+  const [order, setOrder] = useState<number[]>(() =>
+    count > 0 ? Array.from({ length: count }, (_, i) => i) : [0]
+  );
   const name = `${vehicle.brand} ${vehicle.model}`;
+  const hasPhotos = vehicle.photos.length > 0;
+  const thumbs = order.slice(1);
 
   const swapWithMain = (pos: number) => {
     setOrder((prev) => {
@@ -51,34 +51,31 @@ export function Gallery({ vehicle }: { vehicle: Vehicle }) {
           priority
         />
       </div>
-      <div className="gallery-thumbs">
-        {[1, 2, 3].map((pos) => {
-          // Index sans photo réelle → placeholder : ne doit pas pouvoir être
-          // permuté dans l'emplacement principal (vignette inerte, non focusable).
-          if (order[pos] >= vehicle.photos.length) {
+      {hasPhotos && thumbs.length > 0 && (
+        <div
+          className="gallery-thumbs"
+          style={{ gridTemplateColumns: `repeat(${thumbs.length}, minmax(0, 1fr))` }}
+        >
+          {thumbs.map((idx, i) => {
+            const pos = i + 1;
             return (
-              <div key={pos} style={thumbPlaceholder} aria-hidden="true">
-                <CarPhoto vehicle={vehicle} photoIndex={order[pos]} alt="" />
-              </div>
+              <button
+                key={idx}
+                type="button"
+                style={thumbReset}
+                onClick={() => swapWithMain(pos)}
+                aria-label={`Afficher en grand : ${SLOT_LABELS[idx] ?? "photo"}`}
+              >
+                <CarPhoto
+                  vehicle={vehicle}
+                  photoIndex={idx}
+                  alt={`${name} — ${SLOT_LABELS[idx] ?? "photo"}`}
+                />
+              </button>
             );
-          }
-          return (
-            <button
-              key={pos}
-              type="button"
-              style={thumbReset}
-              onClick={() => swapWithMain(pos)}
-              aria-label={`Afficher en grand : ${SLOT_LABELS[order[pos]] ?? "photo"}`}
-            >
-              <CarPhoto
-                vehicle={vehicle}
-                photoIndex={order[pos]}
-                alt={`${name} — ${SLOT_LABELS[order[pos]] ?? "photo"}`}
-              />
-            </button>
-          );
-        })}
-      </div>
+          })}
+        </div>
+      )}
     </>
   );
 }

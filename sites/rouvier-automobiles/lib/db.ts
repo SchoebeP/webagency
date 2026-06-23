@@ -17,6 +17,38 @@ export const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data")
 export const PHOTOS_DIR = path.join(DATA_DIR, "photos");
 const DB_FILE = path.join(DATA_DIR, "db.json");
 
+// Photos de démonstration livrées dans public/seed/<id>-N.jpg (libres de droits,
+// Unsplash/Pexels). Au premier seed elles sont copiées dans PHOTOS_DIR et servies
+// comme des photos normales via /api/photos ; l'opérateur peut les remplacer.
+// Aucune photo pour un véhicule ? le placeholder SVG « Photo à venir » prend le relais.
+const SEED_PHOTOS_DIR = path.join(process.cwd(), "public", "seed");
+
+function seedPhotosFor(id: string): string[] {
+  try {
+    return fs
+      .readdirSync(SEED_PHOTOS_DIR)
+      .filter((f) => f.startsWith(id + "-") && /\.(jpe?g|png|webp)$/i.test(f))
+      .sort();
+  } catch {
+    return [];
+  }
+}
+
+function copySeedPhotos(vehicles: Vehicle[]): void {
+  try {
+    fs.mkdirSync(PHOTOS_DIR, { recursive: true });
+    for (const v of vehicles) {
+      for (const file of v.photos) {
+        const src = path.join(SEED_PHOTOS_DIR, file);
+        const dest = path.join(PHOTOS_DIR, file);
+        if (fs.existsSync(src) && !fs.existsSync(dest)) fs.copyFileSync(src, dest);
+      }
+    }
+  } catch {
+    // best-effort : si la copie échoue, le placeholder SVG s'affiche.
+  }
+}
+
 interface DbData {
   admin: AdminAccount;
   /** Secret HMAC des sessions, généré au seed (surchargé par env SESSION_SECRET). */
@@ -126,7 +158,7 @@ function seedVehicles(): Vehicle[] {
       equipment: ["Écran tactile 7\"", "Carplay / Android Auto", "Régulateur de vitesse", "Aide au freinage d'urgence", "Toit contrasté blanc"],
     },
   ];
-  return cars.map((c) => ({ ...c, sold: false, photos: [] }));
+  return cars.map((c) => ({ ...c, sold: false, photos: seedPhotosFor(c.id) }));
 }
 
 function seedDb(): DbData {
@@ -170,6 +202,7 @@ function readDb(): DbData {
   if (!fs.existsSync(DB_FILE)) {
     const seeded = seedDb();
     writeDb(seeded);
+    copySeedPhotos(seeded.vehicles);
     return seeded;
   }
   return JSON.parse(fs.readFileSync(DB_FILE, "utf8")) as DbData;

@@ -52,12 +52,12 @@ export const seo = {
 /* --- Photos (placeholders Pexels, libres de droits) ------------------------
    Remplacez par les vraies photos d'Hervé : déposez-les dans /public et
    pointez les chemins ici (ex. "/hero.jpg"), ou gardez des URLs Pexels. */
-const px = (id: number, w = 1600) =>
+export const px = (id: number, w = 1600) =>
   `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
 
 export const images = {
-  heroWide: px(31136976), // allée de jardin ensoleillée
-  heroPortrait: px(31960327), // allée de jardin verdoyante
+  heroWide: "/img/hero-wide.jpg", // allée de jardin ensoleillée (px 31136976)
+  heroPortrait: "/img/hero-portrait.jpg", // allée de jardin verdoyante (px 31960327)
 } as const;
 
 /* --- Navigation ------------------------------------------------------------ */
@@ -126,7 +126,7 @@ export const prestations = {
 
 /* --- Réalisations (avant / après) ------------------------------------------
    bSrc = photo AVANT, aSrc = photo APRÈS. */
-const pxBA = (id: number, w = 1400) =>
+export const pxBA = (id: number, w = 1400) =>
   `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}`;
 
 export const realisations = {
@@ -135,10 +135,10 @@ export const realisations = {
   lead: "Glissez la poignée pour comparer l'état initial et le résultat. Quelques chantiers récents dans le Pays de Risle.",
   ctaText: "Envie du même résultat chez vous ?",
   projects: [
-    { id: "ba-haie", title: "Taille d'une haie de thuyas", commune: "Pont-Audemer", before: pxBA(17506144), after: pxBA(36713682), beforeAlt: "Avant — haie envahissante non taillée", afterAlt: "Après — haie nette et carrée" },
-    { id: "ba-jardin", title: "Remise en état d'un jardin", commune: "Le Perrey", before: pxBA(17332275), after: pxBA(31960327), beforeAlt: "Avant — terrain en friche", afterAlt: "Après — pelouse tondue et bordures nettes" },
-    { id: "ba-elagage", title: "Élagage de grands arbres", commune: "Cormeilles", before: pxBA(28157845), after: pxBA(19975452), beforeAlt: "Avant — arbres denses et dangereux", afterAlt: "Après — houppier allégé et sécurisé" },
-    { id: "ba-terrasse", title: "Dalle & abords de terrasse", commune: "Bourg-Achard", before: pxBA(36866669), after: pxBA(37042905), beforeAlt: "Avant — sol irrégulier", afterAlt: "Après — dalle propre et plane" },
+    { id: "ba-haie", title: "Taille d'une haie de thuyas", commune: "Pont-Audemer", before: "/img/real-1-before.jpg", after: "/img/real-1-after.jpg", beforeAlt: "Avant — haie envahissante non taillée", afterAlt: "Après — haie nette et carrée" },
+    { id: "ba-jardin", title: "Remise en état d'un jardin", commune: "Le Perrey", before: "/img/real-2-before.jpg", after: "/img/real-2-after.jpg", beforeAlt: "Avant — terrain en friche", afterAlt: "Après — pelouse tondue et bordures nettes" },
+    { id: "ba-elagage", title: "Élagage de grands arbres", commune: "Cormeilles", before: "/img/real-3-before.jpg", after: "/img/real-3-after.jpg", beforeAlt: "Avant — arbres denses et dangereux", afterAlt: "Après — houppier allégé et sécurisé" },
+    { id: "ba-terrasse", title: "Dalle & abords de terrasse", commune: "Bourg-Achard", before: "/img/real-4-before.jpg", after: "/img/real-4-after.jpg", beforeAlt: "Avant — sol irrégulier", afterAlt: "Après — dalle propre et plane" },
   ],
 } as const;
 

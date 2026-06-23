@@ -49,18 +49,18 @@ export const seo = {
    Remplacez par les vraies photos du restaurant. Priorité : un vrai portrait de
    Laurence pour « Notre histoire ». */
 export const images = {
-  heroIntimate: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1900&q=72",
-  heroConvivial: "https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=1900&q=72",
-  heroRoom: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1900&q=72",
-  pastry: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=900&q=72",
-  spread: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1100&q=72",
-  meat: "https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1000&q=72",
-  dessert: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=900&q=72",
-  cheese: "https://images.unsplash.com/photo-1452195100486-9cc805987862?w=900&q=72",
-  coffee: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=900&q=72",
-  wine: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=900&q=72",
-  terrace: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1000&q=72",
-  village: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=1100&q=72",
+  heroIntimate: "/img/heroIntimate.jpg",
+  heroConvivial: "/img/heroConvivial.jpg",
+  heroRoom: "/img/heroRoom.jpg",
+  pastry: "/img/pastry.jpg",
+  spread: "/img/spread.jpg",
+  meat: "/img/meat.jpg",
+  dessert: "/img/dessert.jpg",
+  cheese: "/img/cheese.jpg",
+  coffee: "/img/coffee.jpg",
+  wine: "/img/wine.jpg",
+  terrace: "/img/terrace.jpg",
+  village: "/img/village.jpg",
 } as const;
 
 export type ImageKey = keyof typeof images;
